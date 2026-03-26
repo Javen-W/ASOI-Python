@@ -49,7 +49,7 @@ pip install numpy scikit-learn
 
 ```python
 import numpy as np
-from main import calculate_asoi
+from asoi import asoi_score
 
 # Example: feature matrix X and binary labels y (0 = normal, 1 = anomaly)
 X = np.array([
@@ -61,7 +61,7 @@ X = np.array([
 ])
 y = np.array([0, 0, 0, 1, 1])
 
-score = calculate_asoi(X, y)
+score = asoi_score(X, y)
 print(f"ASOI Score: {score:.4f}")  # Higher score → better anomaly separation
 ```
 
