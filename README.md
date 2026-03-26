@@ -37,13 +37,12 @@ These two signals are combined into a single weighted score, enabling model comp
 
 - Python 3.8+
 - [NumPy](https://numpy.org/)
-- [pandas](https://pandas.pydata.org/)
 - [scikit-learn](https://scikit-learn.org/)
 
 Install dependencies with:
 
 ```bash
-pip install numpy pandas scikit-learn
+pip install numpy scikit-learn
 ```
 
 ## Usage
