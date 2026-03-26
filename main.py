@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
 
-def calculate_asoi(X: np.ndarray, y: np.ndarray, alpha: float = 0.5, normalize: bool = True) -> float:
+def calculate_asoi(X: np.ndarray, y: np.ndarray, alpha: float = 0.5314, normalize: bool = True) -> float:
     """
     Calculates the full Anomaly Separation and Overlap Index (ASOI).
     https://link.springer.com/article/10.1007/s40747-025-02204-0
