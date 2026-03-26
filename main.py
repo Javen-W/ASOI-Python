@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
 
@@ -16,7 +15,7 @@ def calculate_asoi(X: np.ndarray, y: np.ndarray, alpha: float = 0.5314, normaliz
     :return asoi: (float) The ASOI metric value (higher means better separation and less overlap).
     """
     # Calculate beta and validate weights.
-    if 0.0 < alpha or alpha > 1.0:
+    if alpha < 0.0 or alpha > 1.0:
         raise ValueError(f"Alpha must be in the range of [0, 1].")
     beta = 1.0 - alpha
 
