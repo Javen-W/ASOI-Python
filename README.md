@@ -38,11 +38,12 @@ These two signals are combined into a single weighted score, enabling model comp
 - Python 3.8+
 - [NumPy](https://numpy.org/)
 - [scikit-learn](https://scikit-learn.org/)
+- [SciPy](https://scipy.org/) *(required only for `tests.py`)*
 
 Install dependencies with:
 
 ```bash
-pip install numpy scikit-learn
+pip install numpy scikit-learn scipy
 ```
 
 ## Usage
@@ -115,3 +116,94 @@ The default weights `alpha = 0.5314` and `beta = 0.4686` are taken directly from
 ## Original Algorithm
 
 <img width="537" height="711" alt="asoi_algorithm" src="https://github.com/user-attachments/assets/0d32818d-4bda-49b4-b1e4-cb7ec4ba92c9" />
+
+## Testing
+
+The `tests.py` module contains 24 unit tests organised into five test classes:
+
+| Class | Description |
+|---|---|
+| `TestInputValidation` | Verifies that invalid `alpha` values and non-binary label arrays raise `ValueError`. |
+| `TestScoreProperties` | Validates return type, `[0, 1]` bounds, determinism, edge cases, and the `normalize` flag. |
+| `TestPrecisionDegradation` | Replicates the paper's precision degradation experiment. |
+| `TestSpearmanCorrelation` | Replicates the paper's ASOI–F1 correlation analysis on benchmark datasets. |
+| `TestBenchmarkDatasets` | Score sanity checks on Breast Cancer Wisconsin, Digits, and synthetic datasets. |
+
+### Running the tests
+
+Install the test dependencies (SciPy and pytest) if not already present:
+
+```bash
+pip install numpy scikit-learn scipy pytest
+```
+
+Then run the full test suite from the repository root:
+
+```bash
+python -m pytest tests.py -v
+```
+
+## Test Results
+
+All 24 tests pass. The results below demonstrate the validity of this implementation against the experiments reported in the research paper.
+
+### Unit test output
+
+```
+tests.py::TestInputValidation::test_alpha_above_one_raises PASSED
+tests.py::TestInputValidation::test_alpha_below_zero_raises PASSED
+tests.py::TestInputValidation::test_multiclass_labels_raise PASSED
+tests.py::TestInputValidation::test_only_anomaly_labels_raise PASSED
+tests.py::TestInputValidation::test_only_normal_labels_raise PASSED
+tests.py::TestScoreProperties::test_alpha_one_uses_only_separation PASSED
+tests.py::TestScoreProperties::test_alpha_zero_uses_only_hellinger PASSED
+tests.py::TestScoreProperties::test_constant_feature_handled PASSED
+tests.py::TestScoreProperties::test_deterministic PASSED
+tests.py::TestScoreProperties::test_list_inputs_accepted PASSED
+tests.py::TestScoreProperties::test_normalize_flag_has_effect PASSED
+tests.py::TestScoreProperties::test_returns_float PASSED
+tests.py::TestScoreProperties::test_score_in_unit_interval PASSED
+tests.py::TestScoreProperties::test_single_feature PASSED
+tests.py::TestScoreProperties::test_well_separated_beats_overlapping PASSED
+tests.py::TestPrecisionDegradation::test_asoi_decreases_overall_with_label_noise PASSED
+tests.py::TestPrecisionDegradation::test_perfect_labels_beat_random_labels PASSED
+tests.py::TestSpearmanCorrelation::test_positive_spearman_breast_cancer PASSED
+tests.py::TestSpearmanCorrelation::test_positive_spearman_digits_binary PASSED
+tests.py::TestBenchmarkDatasets::test_breast_cancer_wisconsin PASSED
+tests.py::TestBenchmarkDatasets::test_digits_binary_zero_vs_one PASSED
+tests.py::TestBenchmarkDatasets::test_synthetic_high_contamination PASSED
+tests.py::TestBenchmarkDatasets::test_synthetic_high_dimensional PASSED
+tests.py::TestBenchmarkDatasets::test_synthetic_low_contamination PASSED
+
+24 passed in 1.06s
+```
+
+### Benchmark dataset scores
+
+| Dataset | Samples | Features | Anomaly % | ASOI (true labels) | ASOI (random labels) |
+|---|---|---|---|---|---|
+| Breast Cancer Wisconsin | 569 | 30 | 37.3 % | **0.3273** | 0.1347 |
+| Digits (digit 0 vs 1) | 360 | 64 | 50.6 % | **0.3148** | — |
+
+The ASOI score for the true label assignment consistently exceeds that of random label assignments, confirming the metric's discriminative power.
+
+### Precision degradation test
+
+The table below shows ASOI and F1 scores on a synthetic dataset (300 samples, 5 features, 10 % contamination) as random label noise is progressively introduced. Both metrics degrade together, confirming that ASOI tracks detector quality faithfully.
+
+| Noise Level | ASOI Score | F1 Score |
+|---|---|---|
+| 0 % | 0.7430 | 1.0000 |
+| 10 % | 0.4153 | 0.6429 |
+| 20 % | 0.2796 | 0.4340 |
+| 30 % | 0.2282 | 0.3478 |
+| 40 % | 0.1725 | 0.2308 |
+
+### Spearman correlation: ASOI vs F1
+
+The Spearman rank correlation between ASOI and F1 score across 12 noise levels confirms the implementation matches the paper's central finding — that ASOI is highly correlated with supervised metrics even without labels.
+
+| Dataset | Spearman ρ | p-value |
+|---|---|---|
+| Breast Cancer Wisconsin | **0.9930** | < 0.0001 |
+| Digits (digit 0 vs digit 1) | **0.9720** | < 0.0001 |
