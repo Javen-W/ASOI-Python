@@ -33,18 +33,28 @@ These two signals are combined into a single weighted score, enabling model comp
 | Zakarya Farou | zakaryafarou@inf.elte.hu | Eötvös Loránd University (ELTE), Budapest, Hungary |
 | Imre Lendák | lendak@inf.elte.hu | Eötvös Loránd University (ELTE), Budapest, Hungary |
 
+## Installation
+
+Install the package directly from GitHub:
+
+```bash
+pip install git+https://github.com/Javen-W/ASOI-Python.git
+```
+
+Or clone and install locally:
+
+```bash
+git clone https://github.com/Javen-W/ASOI-Python.git
+cd ASOI-Python
+pip install .
+```
+
 ## Requirements
 
 - Python 3.8+
 - [NumPy](https://numpy.org/)
 - [scikit-learn](https://scikit-learn.org/)
 - [SciPy](https://scipy.org/) *(required only for `tests.py`)*
-
-Install dependencies with:
-
-```bash
-pip install numpy scikit-learn scipy
-```
 
 ## Usage
 
