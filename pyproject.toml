@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "asoi"
+version = "1.0.0"
+description = "Anomaly Separation and Overlap Index (ASOI): an intrinsic evaluation metric for unsupervised anomaly detection"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.8"
+dependencies = [
+    "numpy>=1.20.0",
+    "scikit-learn>=1.0.0",
+]
+keywords = ["anomaly detection", "evaluation metric", "machine learning", "unsupervised"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+[project.urls]
+Homepage = "https://github.com/Javen-W/ASOI-Python"
+"Bug Tracker" = "https://github.com/Javen-W/ASOI-Python/issues"
+Paper = "https://doi.org/10.1007/s40747-025-02204-0"
+
+[tool.setuptools]
+py-modules = ["asoi"]
